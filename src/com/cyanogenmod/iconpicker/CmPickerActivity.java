@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -29,8 +28,8 @@ public class CmPickerActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View v, int position, long id) {
                 Intent in = new Intent();
                 DrawableInfo d = (DrawableInfo) adapterView.getAdapter().getItem(position);
-                in.putExtra("image_normal", ((BitmapDrawable)d.draw_normal).getBitmap());
-                in.putExtra("image_activated", ((BitmapDrawable)d.draw_activated).getBitmap());
+                in.putExtra("resource_name", d.resource_name);
+                in.putExtra("package_name", getPackageName());
                 setResult(Activity.RESULT_OK, in);
                 finish();
             }
@@ -50,10 +49,9 @@ public class CmPickerActivity extends Activity {
                     int idNorm = getResources().getIdentifier(f.getName(), "drawable", getPackageName());
                     int idAct = getResources().getIdentifier(f.getName().replaceAll("_normal", "_activated"), "drawable", getPackageName());
                     if (idNorm != 0 && idAct != 0) {
-                        Drawable drawNorm = getResources().getDrawable(idNorm);
-                        Drawable drawAct = getResources().getDrawable(idAct);
-                        if (drawNorm != null && drawAct != null) {
-                            mDrawables.add(new DrawableInfo(drawNorm, drawAct));
+                        Drawable draw = getResources().getDrawable(idNorm);
+                        if (draw != null) {
+                            mDrawables.add(new DrawableInfo(draw, f.getName()));
                         }
                     }
                 }
@@ -82,18 +80,18 @@ public class CmPickerActivity extends Activity {
             } else {
                 imageView = (ImageView) convertView;
             }
-            imageView.setImageDrawable(((DrawableInfo) getItem(position)).draw_normal);
+            imageView.setImageDrawable(((DrawableInfo) getItem(position)).drawable);
             return imageView;
         }
 
     }
     
     private class DrawableInfo {
-        Drawable draw_normal;
-        Drawable draw_activated;
-        DrawableInfo(Drawable norm, Drawable act) {
-            draw_normal = norm;
-            draw_activated = act;
+        Drawable drawable;
+        String resource_name;
+        DrawableInfo(Drawable d, String n) {
+            drawable = d;
+            resource_name = n;
         }
     }
 }
