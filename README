@@ -1,0 +1,15 @@
+CmIconPicker
+
+How it works :
+
+It captures com.cyanogenmod.ACTION_PICK_ICON and shows the list of icons
+Upon choosing one, it appends
+"image_normal" and "image_activated" as extra's to the return intent.
+Those 2 extra's are bitmaps of the appropriate drawable states.
+
+How to add new images :
+
+Images must be of format ic_*_normal.png and have a corresponding
+ic_*_activated.png
+
+Just drop a pair into the drawable folders and thats it.
